@@ -1,3 +1,5 @@
+'use strict';
+
 /*! ContextSizes
  * https://github.com/michaelrog/ContextSizes.js
  * @licence MIT
@@ -10,7 +12,7 @@
      * @see http://tips.tutorialhorizon.com/2017/01/06/object-doesnt-support-property-or-method-foreach/
      */
     (function () {
-        if ( typeof NodeList.prototype.forEach === "function" ) return false;
+        if (typeof NodeList.prototype.forEach === "function") return false;
         NodeList.prototype.forEach = Array.prototype.forEach;
     })();
 
@@ -20,7 +22,7 @@
      * @namespace
      * @type {{addClass: addClass, removeClass: removeClass, matchesSelector: matchesSelector}}
      */
-    let ContextSizesHelpers = {
+    var ContextSizesHelpers = {
         /**
          * Adds a class.
          *
@@ -56,14 +58,8 @@
          * @param {string} selector The selector.
          * @returns {boolean} Whether or not the given element matches the given selector.
          */
-        matchesSelector: function(element, selector) {
-            let matchesSelector = element.matches
-                || element.matchesSelector
-                || element.webkitMatchesSelector
-                || element.mozMatchesSelector
-                || element.msMatchesSelector
-                || element.oMatchesSelector
-                || null;
+        matchesSelector: function matchesSelector(element, selector) {
+            var matchesSelector = element.matches || element.matchesSelector || element.webkitMatchesSelector || element.mozMatchesSelector || element.msMatchesSelector || element.oMatchesSelector || null;
             return matchesSelector ? matchesSelector.call(element, selector) : false;
         },
 
@@ -72,23 +68,13 @@
          *
          * @returns {*}
          */
-        requestAnimationFrame: window.requestAnimationFrame
-                || window.webkitRequestAnimationFrame
-                || window.mozRequestAnimationFrame
-                || window.msRequestAnimationFrame
-                || window.oRequestAnimationFrame
-                || null,
+        requestAnimationFrame: window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || null,
 
         /**
          * Tries to get cancelAnimationFrame with prefixed fallbacks.
          * @returns {*}
          */
-        cancelAnimationFrame: window.cancelAnimationFrame
-                || window.webkitCancelAnimationFrame
-                || window.mozCancelAnimationFrame
-                || window.msCancelAnimationFrame
-                || window.oCancelAnimationFrame
-                || null
+        cancelAnimationFrame: window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.msCancelAnimationFrame || window.oCancelAnimationFrame || null
     };
 
     /**
@@ -97,23 +83,23 @@
      *
      * @type {{add, trigger}}
      */
-    let ContextSizesResizeHandler = (function ContextSizesResizeHandler() {
+    var ContextSizesResizeHandler = function ContextSizesResizeHandler() {
         /**
          * Collection of added callbacks.
          * @type {Array}
          */
-        let callbacks = [];
+        var callbacks = [];
         /**
          * Flag to determine whether or not the resize loop is currently running.
          * @type {boolean}
          */
-        let running = false;
+        var running = false;
 
         /**
          * Attempts to get a requestAnimationFrame method.
          * @type {requestAnimationFrame}
          */
-        let raf = ContextSizesHelpers.requestAnimationFrame;
+        var raf = ContextSizesHelpers.requestAnimationFrame;
 
         /**
          * Fired on resize event.
@@ -172,61 +158,61 @@
                 scheduleCallbacks();
             }
         };
-    }());
+    }();
 
     /**
      * Watches the body for height changes.
      *
      * @type {{start, stop}}
      */
-    let ContextSizesBodyWatcher = (function () {
+    var ContextSizesBodyWatcher = function () {
         /**
          * Attempts to get a requestAnimationFrame method.
          * @type {requestAnimationFrame}
          */
-        let raf = ContextSizesHelpers.requestAnimationFrame;
+        var raf = ContextSizesHelpers.requestAnimationFrame;
         /**
          * Attempts to get a cancelAnimationFrame method.
          * @type {cancelAnimationFrame}
          */
-        let caf = ContextSizesHelpers.cancelAnimationFrame;
+        var caf = ContextSizesHelpers.cancelAnimationFrame;
         /**
          * Tries to get the body element.
          * @type {Element}
          */
-        let container = (typeof document.body !== 'undefined') ? document.body : null;
+        var container = typeof document.body !== 'undefined' ? document.body : null;
         /**
          * Flag to determine if the loop can run or not
          * @type {Element|*}
          */
-        let canRun = container && raf;
+        var canRun = container && raf;
         /**
          * Maximum speed to run the body watcher check. This throttles
          * it down even if we technically can run the loop faster.
          * @type {number}
          */
-        let interval = 500;
+        var interval = 500;
         /**
          * The start time.
          * @type {number}
          */
-        let then = Date.now();
+        var then = Date.now();
         /**
          * The elapsed time.
          */
-        let delta;
+        var delta = void 0;
         /**
          * The raf timer object.
          */
-        let timer;
+        var timer = void 0;
         /**
          * Holds the last scroll height from the previous loop.
          */
-        let lastScrollHeight;
+        var lastScrollHeight = void 0;
         /**
          * Holds the last scroll width from the previous loop.
          */
-        let lastScrollWidth;
+        var lastScrollWidth = void 0;
 
         /**
          * Loop to monitor body content changes.
@@ -254,7 +240,7 @@
             /**
              * Starts the loop.
              */
-            start: function () {
+            start: function start() {
                 if (canRun && !timer) {
                     timer = raf(callback);
                 }
@@ -262,25 +248,25 @@
             /**
              * Stops the loop.
              */
-            stop: function () {
+            stop: function stop() {
                 if (canRun && timer) {
                     caf(timer);
                 }
             }
-        }
-    }());
+        };
+    }();
 
     /**
      * The main return object.
      *
      * @class
      */
-    let ContextSizes = (function ContextSizes() {
+    var ContextSizes = function ContextSizes() {
         /**
          * Self reference.
          * @type {ContextSizes}
          */
-        const self = this;
+        var self = this;
         /**
          * Keeps track of registered profiles.
          * @type {Array}
@@ -323,17 +309,17 @@
              * The profile root. Defaults to `document`
              * @type {Node|HTMLDocument}
              */
-            let root = profile.root || document;
+            var root = profile.root || document;
 
             /**
              * The elements that match the profile selector.
              * @type {NodeList}
              */
-            let elements = root.querySelectorAll(profile.selector);
+            var elements = root.querySelectorAll(profile.selector);
 
             //process each of the elements
-            elements.forEach((el) => {
-                self.processElement(el, profile)
+            elements.forEach(function (el) {
+                self.processElement(el, profile);
             });
 
             //start the watchers if the `live` option is truthy
@@ -354,12 +340,12 @@
                  * the newbies and triggers an update.
                  * @type {MutationObserver}
                  */
-                let observer = new MutationObserver(function (mutations) {
+                var observer = new MutationObserver(function (mutations) {
                     /**
                      * Flag to keep track of whether or not any new matches were found.
                      * @type {boolean}
                      */
-                    let hasNewMatches = false;
+                    var hasNewMatches = false;
 
                     //loop through each mutation
                     mutations.forEach(function (mutation) {
@@ -368,7 +354,7 @@
                             //loop through added nodes
                             mutation.addedNodes.forEach(function (addedNode) {
                                 //see if the mode matches the selector
-                                let doesMatch = ContextSizesHelpers.matchesSelector(addedNode, profile.selector);
+                                var doesMatch = ContextSizesHelpers.matchesSelector(addedNode, profile.selector);
                                 //handle matches
                                 if (doesMatch) {
                                     self.processElement(addedNode, profile);
@@ -385,7 +371,7 @@
                 });
 
                 //pass in the target and observer options
-                observer.observe(document.body, {attributes: false, childList: true, subtree: true, characterData: false});
+                observer.observe(document.body, { attributes: false, childList: true, subtree: true, characterData: false });
             }
         };
 
@@ -396,8 +382,8 @@
          * @param {object} profile
          */
         self.processElement = function processElement(el, profile) {
-            let width;
-            let height;
+            var width = void 0;
+            var height = void 0;
 
             //set the default watch type to self
             if (typeof profile.watch === 'undefined') {
@@ -416,29 +402,14 @@
 
             //add/update the size attribute, if any
             if (self.sizesDataAttr) {
-                el.setAttribute('data-'+self.sizesDataAttr, width+'x'+height);
+                el.setAttribute('data-' + self.sizesDataAttr, width + 'x' + height);
             }
 
             //add/remove classes depending on the element's width and profile configuration
             profile.sizes.forEach(function (size) {
-                if (
-                    (
-                        size.minWidth === undefined || size.minWidth === null
-                        || Number(size.minWidth) <= width
-                    ) && (
-                        size.maxWidth === undefined || size.maxWidth === null
-                        || Number(size.maxWidth) >= width
-                    ) && (
-                        size.minHeight === undefined || size.minHeight === null
-                        || Number(size.minHeight) <= height
-                    ) && (
-                        size.maxHeight === undefined || size.maxHeight === null
-                        || Number(size.maxHeight) >= height
-                    )
-                ) {
+                if ((size.minWidth === undefined || size.minWidth === null || Number(size.minWidth) <= width) && (size.maxWidth === undefined || size.maxWidth === null || Number(size.maxWidth) >= width) && (size.minHeight === undefined || size.minHeight === null || Number(size.minHeight) <= height) && (size.maxHeight === undefined || size.maxHeight === null || Number(size.maxHeight) >= height)) {
                     ContextSizesHelpers.addClass(el, size.class);
-                }
-                else {
+                } else {
                     ContextSizesHelpers.removeClass(el, size.class);
                 }
             });
@@ -483,17 +454,19 @@
         self.watchContent = ContextSizesBodyWatcher;
 
         return self;
-
-    }());
+    }();
 
     //exports as common, defines as amd, or pollutes the global namespace depending on the environment.
-    if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') { //common
+    if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+        //common
         module.exports = ContextSizes;
-    } else if (typeof define === 'function' && define.amd) { //amd
+    } else if (typeof define === 'function' && define.amd) {
+        //amd
         define([], function () {
             return ContextSizes;
         });
-    } else { //browser
+    } else {
+        //browser
         window.ContextSizes = ContextSizes;
     }
 })();
