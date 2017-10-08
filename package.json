@@ -1,0 +1,33 @@
+{
+  "name": "ContextSizes",
+  "version": "0.1.0",
+  "description": "A hacky little script to facilitate component-first CSS",
+  "homepage": "https://github.com/michaelrog/ContextSizes.js",
+  "bugs": "https://github.com/michaelrog/ContextSizes.js/issues",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "uglify-js": "^3.1.3"
+  },
+  "scripts": {
+    "transpile": "babel src -d dist",
+    "minify": "uglifyjs dist/ContextSizes.js --screw-ie8 --compress --mangle --comments /^!/ --output dist/ContextSizes.min.js",
+    "build": "yarn run transpile && yarn run minify",
+    "babel-live": "babel --watch src --out-dir dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:michaelrog/ContextSizes.js.git"
+  },
+  "keywords": [
+    "css"
+  ],
+  "author": "Michael Rog <michael@michaelrog.com> (https://michaelrog.com/)",
+  "contributors": [
+    {"name": "Aaron Waldon", "url": "https://www.causingeffect.com"}
+  ],
+  "license": "MIT",
+  "main": "./dist/ContextSizes.js",
+  "dependencies": {}
+}
